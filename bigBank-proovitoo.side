@@ -1,0 +1,151 @@
+{
+  "id": "f8cdb1dd-9d09-47d0-9d25-bd4e9a700dfa",
+  "version": "2.0",
+  "name": "bigBank-proovitoo",
+  "url": "https://ansokan.bigbank.se",
+  "tests": [{
+    "id": "a5065596-8668-44f4-8508-2f8fd5de3909",
+    "name": "Test Default Values",
+    "commands": [{
+      "id": "22a530b5-7fbe-4941-868e-8121f1fe7a36",
+      "comment": "",
+      "command": "open",
+      "target": "/?amount=85000&period=120&interestRate=10.95&lang=sv&bbsource=google&bbchannel=organic",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2e2bb799-d3db-43a5-879b-442745bc4841",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "945x1030",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "17ea429f-87f8-4c67-88b6-8971be20c169",
+      "comment": "",
+      "command": "click",
+      "target": "css=.bb-button__icon-after",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "37371a2f-723c-4dcb-9161-39652a4e261b",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.bb-calculator__result-value",
+      "targets": [],
+      "value": "1210,73 SEK"
+    }, {
+      "id": "6e88093a-7cda-45b9-a36d-d868d6581aa5",
+      "comment": "",
+      "command": "click",
+      "target": "css=#header-calculator-amount .svg3599908832__a",
+      "targets": [
+        ["css=#header-calculator-amount .svg3599908832__a", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "6d3dfdd6-84f5-47d2-a89f-8978b6fd7717",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "css=#header-calculator-amount .bb-currency-input__input",
+      "targets": [
+        ["css=#header-calculator-amount .bb-currency-input__input", "css:finder"],
+        ["xpath=//div[@id='header-calculator-amount']/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "85"
+    }, {
+      "id": "d0cf0eaf-be76-4233-afb7-388d0de39052",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "css=#header-calculator-amount .bb-currency-input__input",
+      "targets": [
+        ["css=#header-calculator-amount .bb-currency-input__input", "css:finder"],
+        ["xpath=//div[@id='header-calculator-amount']/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "000"
+    }, {
+      "id": "77b8ab6e-4684-4256-882f-1b5ba173e74a",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=.bb-calculator__result-value--loader",
+      "targets": [
+        ["css=.bb-calculator__result-value", "css:finder"],
+        ["xpath=//div[@id='header-calculator']/div[3]/p[2]", "xpath:idRelative"],
+        ["xpath=//p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'1210,73 SEK')]", "xpath:innerText"]
+      ],
+      "value": "5000"
+    }, {
+      "id": "2a7557fd-e99c-4ac6-8422-c5fd06e4126c",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.bb-calculator__result-value",
+      "targets": [
+        ["css=.bb-calculator__result-value", "css:finder"],
+        ["xpath=//div[@id='header-calculator']/div[3]/p[2]", "xpath:idRelative"],
+        ["xpath=//p[2]", "xpath:position"]
+      ],
+      "value": "1210,73 SEK"
+    }, {
+      "id": "668d1000-fa60-4c82-8104-5d48eb53ca1e",
+      "comment": "",
+      "command": "click",
+      "target": "css=#header-calculator-period .bb-slider__edit-button",
+      "targets": [
+        ["css=#header-calculator-period .bb-slider__edit-button", "css:finder"],
+        ["xpath=(//button[@type='button'])[4]", "xpath:attributes"],
+        ["xpath=//div[@id='header-calculator-period']/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5da5f653-3223-4556-a575-46583ca026c3",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "css=#header-calculator-period .bb-currency-input__input",
+      "targets": [
+        ["css=#header-calculator-period .bb-currency-input__input", "css:finder"],
+        ["xpath=//div[@id='header-calculator-period']/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "12"
+    }, {
+      "id": "cd4b5c02-acba-4585-ad46-568fd7c51dc4",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "css=#header-calculator-period .bb-currency-input__input",
+      "targets": [
+        ["css=#header-calculator-period .bb-currency-input__input", "css:finder"],
+        ["xpath=//div[@id='header-calculator-period']/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/input", "xpath:position"]
+      ],
+      "value": "0"
+    }, {
+      "id": "86a122a6-a159-4710-84e7-1629258be056",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "css=.bb-calculator__result-value--loader",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "58f9ca6d-e359-487b-80e4-e6e537faff91",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.bb-calculator__result-value",
+      "targets": [],
+      "value": "1210,73 SEK"
+    }]
+  }],
+  "suites": [{
+    "id": "9fc94a9d-5c82-43c3-9662-d2d2ee54236a",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["a5065596-8668-44f4-8508-2f8fd5de3909"]
+  }],
+  "urls": ["https://ansokan.bigbank.se/"],
+  "plugins": []
+}

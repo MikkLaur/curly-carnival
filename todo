@@ -1,0 +1,12 @@
+Use WebDriver Manager (https://github.com/bonigarcia/webdrivermanager) instead of chromedriver.exe found from Windows %PATH% variable.
+ * When running the automation project, no extra drivers or dependencies should be needed to add manually.
+
+Replace FirefoxDriver with ChromeDriver.
+
+Try to replace MainTest.waitForLoading with a method similar to waitForElementNotPresent from Selenium IDE.
+Currently it seems it puts the WebDriver on hold for 500ms, but the thread running Java immediately continues executing the following assertEquals case.
+
+Clean up main.java.Main method.
+
+Plan ahead - design and document what you want to test before writing the tests.
+
