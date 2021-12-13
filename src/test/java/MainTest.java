@@ -1,7 +1,3 @@
-package main.java;
-
-import jdk.jfr.Timespan;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,7 +24,7 @@ class MainTest {
         driver.get("https://ansokan.bigbank.se/?amount=85000&period=120&interestRate=10.95&lang=sv&bbsource=google&bbchannel=organic");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     void DefaultValues() throws InterruptedException {
         driver.findElement(By.cssSelector(".bb-button__icon-after")).click();
         WebElement el = driver.findElement(By.cssSelector(".bb-calculator__result-value"));

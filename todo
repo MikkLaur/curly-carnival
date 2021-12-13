@@ -4,9 +4,10 @@ Use WebDriver Manager (https://github.com/bonigarcia/webdrivermanager) instead o
 Replace FirefoxDriver with ChromeDriver.
 
 Try to replace MainTest.waitForLoading with a method similar to waitForElementNotPresent from Selenium IDE.
-Currently it seems it puts the WebDriver on hold for 500ms, but the thread running Java immediately continues executing the following assertEquals case.
+Currently it seems it puts the WebDriver on hold for 500ms, but the thread running the Java executable immediately continues with the following assertEquals case causing the test to misfire at times.
 
 Clean up main.java.Main method.
 
-Plan ahead - design and document what you want to test before writing the tests.
+Plan ahead - design and document what you need to test before writing the tests.
 
+Implement API calling functionality.
