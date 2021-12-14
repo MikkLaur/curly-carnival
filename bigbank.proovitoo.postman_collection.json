@@ -1,0 +1,337 @@
+{
+	"info": {
+		"_postman_id": "81e612e3-2452-402d-b18b-a8969943ac41",
+		"name": "bigbank.proovitoo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "calculate default",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"const apiUrl = \"https://ansokan.bigbank.se/api/v1/loan/calculate\"\r",
+							"const schema = { \r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"totalRepayableAmount\": {\"type\": \"number\" },\r",
+							"        \"monthlyPayment\": {\"type\": \"number\" },\r",
+							"        \"apr\": {\"type\": \"number\" }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// This is the most basic test to do to check whether the request is even valid.\r",
+							"// Helps to narrow down issues.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Response time from the API should not be long.\r",
+							"pm.test(\"Response time is less than 2000ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"// A concrete response is expected. This tests if incoming keys and datatypes are valid.\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"// Test for unexpected behaviour. Just in case.\r",
+							"pm.test(\"Check values not to be null or zero\", function () {\r",
+							"    pm.expect(jsonData.totalRepayableAmount).not.eql(0);\r",
+							"    pm.expect(jsonData.totalRepayableAmount).not.eql(null);\r",
+							"    pm.expect(jsonData.totalRepayableAmount).not.eql(' ');\r",
+							"\r",
+							"    pm.expect(jsonData.monthlyPayment).not.eql(0);\r",
+							"    pm.expect(jsonData.monthlyPayment).not.eql(null);\r",
+							"    pm.expect(jsonData.monthlyPayment).not.eql(' ');\r",
+							"\r",
+							"    pm.expect(jsonData.apr).not.eql(0);\r",
+							"    pm.expect(jsonData.apr).not.eql(null);\r",
+							"    pm.expect(jsonData.apr).not.eql(' ');\r",
+							"});\r",
+							"\r",
+							"// Since I don't know the exact formula used to calculate loans, I chose the approach of comparing the outputs when given different inputs to calculate endpoint. This isn't a rock-solid way of testing, since a faulty formula used to calculate loans might still pass these tests. Maybe it is off only by a couple of SEKs. Then again using the same formula used behind calculate endpoint would yield tests that are pointless.  \r",
+							"// Request the same loan but with 1 month longer loan duration\r",
+							"pm.sendRequest({\r",
+							"    url: apiUrl,\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Accept': '*/*',\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            maturity: 119,\r",
+							"            productType: \"LOANSE02\",\r",
+							"            amount: 85000,\r",
+							"            interestRate: 10.95,\r",
+							"            monthlyPaymentDay: 27,\r",
+							"            administrationFee: 40,\r",
+							"            conclusionFee: 695,\r",
+							"            currency: \"SEK\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    pm.test(\"Shorter loan duration has a higher monthly repayment amount\", function () {\r",
+							"        pm.expect(jsonData.monthlyPayment).to.be.lessThan(res.json().monthlyPayment);\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"// Request the same loan but with 1 month longer loan duration\r",
+							"pm.sendRequest({\r",
+							"    url: apiUrl,\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Accept': '*/*',\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            maturity: 121,\r",
+							"            productType: \"LOANSE02\",\r",
+							"            amount: 85000,\r",
+							"            interestRate: 10.95,\r",
+							"            monthlyPaymentDay: 27,\r",
+							"            administrationFee: 40,\r",
+							"            conclusionFee: 695,\r",
+							"            currency: \"SEK\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    pm.test(\"Longer loan duration has a lower monthly repayment amount\", function () {\r",
+							"        pm.expect(jsonData.monthlyPayment).to.be.greaterThan(res.json().monthlyPayment);\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"// **TODO**\r",
+							"// More cases with different loan durations. Maybe a test which loops through all possible loan duration to achieve higher test coverage.\r",
+							"// Larger loaned sum for the same duration has a higher monthly repayment\r",
+							"// Smaller loaned sum for the same duration has a lower monthly repayment\r",
+							"\r",
+							"// Request the same loan but with double the contract set-up fee\r",
+							"pm.sendRequest({\r",
+							"    url: apiUrl,\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Accept': '*/*',\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            maturity: 120,\r",
+							"            productType: \"LOANSE02\",\r",
+							"            amount: 85000,\r",
+							"            interestRate: 10.95,\r",
+							"            monthlyPaymentDay: 27,\r",
+							"            administrationFee: 40,\r",
+							"            conclusionFee: 1390,\r",
+							"            currency: \"SEK\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    pm.test(\"More expensive conclusion fee has a higher APRC\", function () {\r",
+							"        pm.expect(jsonData.apr).to.be.lessThan(res.json().apr);\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"// Request the same loan but with no contract set-up fee\r",
+							"pm.sendRequest({\r",
+							"    url: apiUrl,\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Accept': '*/*',\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            maturity: 120,\r",
+							"            productType: \"LOANSE02\",\r",
+							"            amount: 85000,\r",
+							"            interestRate: 10.95,\r",
+							"            monthlyPaymentDay: 27,\r",
+							"            administrationFee: 40,\r",
+							"            conclusionFee: 0,\r",
+							"            currency: \"SEK\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    pm.test(\"A loan with no conclusion fee has a lower APRC\", function () {\r",
+							"        pm.expect(jsonData.apr).to.be.greaterThan(res.json().apr);\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"// **TODO**\r",
+							"// More testcases for APRC"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"maturity\": 120,\r\n    \"productType\": \"LOANSE02\",\r\n    \"amount\": 85000,\r\n    \"interestRate\": 10.95,\r\n    \"monthlyPaymentDay\": 27,\r\n    \"administrationFee\": 40,\r\n    \"conclusionFee\": 695,\r\n    \"currency\": \"SEK\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ansokan.bigbank.se/api/v1/loan/calculate",
+					"protocol": "https",
+					"host": [
+						"ansokan",
+						"bigbank",
+						"se"
+					],
+					"path": [
+						"api",
+						"v1",
+						"loan",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "zero fees and zero interest rate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"const schema = { \r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"totalRepayableAmount\": {\"type\": \"number\" },\r",
+							"        \"monthlyPayment\": {\"type\": \"number\" },\r",
+							"        \"apr\": {\"type\": \"number\" }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"totalRepayableAmount\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"monthlyPayment\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"apr\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"maturity\": 120,\r\n    \"productType\": \"LOANSE02\",\r\n    \"amount\": 85000,\r\n    \"interestRate\": 0,\r\n    \"monthlyPaymentDay\": 27,\r\n    \"administrationFee\": 0,\r\n    \"conclusionFee\": 695,\r\n    \"currency\": \"SEK\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ansokan.bigbank.se/api/v1/loan/calculate",
+					"protocol": "https",
+					"host": [
+						"ansokan",
+						"bigbank",
+						"se"
+					],
+					"path": [
+						"api",
+						"v1",
+						"loan",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "zero loan amount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"const schema = { \r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"error\": {\r",
+							"            \"type\": \"object\",\r",
+							"            \"properties\": {\r",
+							"                \"code\": \"number\",\r",
+							"                \"message\": \"string\"\r",
+							"            }\r",
+							"         },\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test('Schema is valid', function() {\r",
+							"  pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"maturity\": 120,\r\n    \"productType\": \"LOANSE02\",\r\n    \"amount\": 0,\r\n    \"interestRate\": 10.95,\r\n    \"monthlyPaymentDay\": 27,\r\n    \"administrationFee\": 40,\r\n    \"conclusionFee\": 695,\r\n    \"currency\": \"EUR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ansokan.bigbank.se/api/v1/loan/calculate",
+					"protocol": "https",
+					"host": [
+						"ansokan",
+						"bigbank",
+						"se"
+					],
+					"path": [
+						"api",
+						"v1",
+						"loan",
+						"calculate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
