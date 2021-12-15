@@ -7,7 +7,7 @@ Read the two documents '*Big Bank QA Assignment - Manual testing testcases.pdf*'
 Download Selenium IDE extension for either FireFox or Chrome from here: https://www.selenium.dev/selenium-ide/
 From Selenium IDE import '*bigBank-proovitoo.side*' found in '*solutions*' folder. Press CTRL-R to run the test suite.
 When running the tests, adjusting the execution speed might be necessary to give UI elements enough time to load.
-
+![Selenium IDE solution](./solutions/selenium.ide.solution.png)
 ## To assess the calculate API verification of calculate endpoint
 
 Have Postman installed (found here: https://www.postman.com/). Import the postman collection '*bigbank.proovitoo.postman_collection.json*'. Most of the tests can be found under '*calculate default*' request, some *under 'zero fees and zero interest rate*' or '*zero loan amount*'. Only '*calculate default*' has been commented detailing which approach I chose and why.
