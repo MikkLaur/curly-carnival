@@ -2,7 +2,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Configuration.holdBrowserOpen;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.sleep;
 
@@ -17,6 +16,7 @@ public class CalculatorModalTest {
         $(".bb-calculator__result-value").should(exist);
         $("#header-calculator-amount > div.bb-slider__value > button").click();
         $("#header-calculator-amount > div.bb-slider__value > div > input").sendKeys("82000");
+
 
         $(".bb-currency-input__input");
         $(".bb-calculator__result-value");
